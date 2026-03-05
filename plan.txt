@@ -1,0 +1,13 @@
+front -> react + tailwing
+API -> fastAPI
+torch model runtime -> ONXX
+container -> docker
+webserver -> uvicorn / firebase 
+
+
+
+DEADLINE 8/3/69
+
+1-2 -> web page
+3-5 -> API + runtime
+6-8 -> docker and hosting
