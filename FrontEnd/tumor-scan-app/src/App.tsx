@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import './App.css'
-import { ImageInput, ImageField } from 'react-admin';
 // import ScanImageInput from './ImageInput'
 
 

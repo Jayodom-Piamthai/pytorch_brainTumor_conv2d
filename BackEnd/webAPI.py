@@ -8,10 +8,13 @@ import json
 import time
 from contextlib import asynccontextmanager
 
+from predictionSchema import PredictionRequest, PredictionResponse
+
 from torchvision import datasets, transforms
-import torch
+from torch import torch,nn,optim
 from PIL import Image
 
+#----------------Model define-------------------------------
 image_height = 224
 image_width = 224
 scannerPreprocess = transforms.Compose([
@@ -20,6 +23,28 @@ scannerPreprocess = transforms.Compose([
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ])
 
+class CNN_tumor(nn.Module):
+    def __init__(self, model_path: str):
+        super().__init__()
+        """
+        Initialize the model by loading the pre-trained model from the specified path.
+        """
+        # self.model
+        
+        # Load the trained model (assuming it's a PyTorch model saved as .pth)
+        self.model = torch.load(model_path)
+        self.model.load_state_dict(torch.load(MODEL_PATH, weights_only=True))
+        # self.model.eval()  # Set the model to evaluation mode
+
+def predict(brainScanImage):
+    model.eval()
+    with torch.no_grad():
+        input_data = scannerPreprocess(brainScanImage).to(device)
+        y_preds = model(input_data.unsqueeze(0))
+        predicted_class = torch.argmax(y_preds, dim=1).item()
+        print(f"tumor prediction : class {predicted_class} ; {y_preds}")
+
+#--------------FastAPI----------------------
 app = FastAPI()
 
 #-----------------MIDDLEWARE---------------------
@@ -60,11 +85,27 @@ async def lifespan(app: FastAPI):
 
 # app = FastAPI(lifespan=lifespan, title="Pytorch API")
 
+#---------------------api title------------------------------
 app = FastAPI(title =' Brain Tumor Scan API')
+#--------------------model holder----------------------
+model = None
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
+# -------------------api requests-------------------------
+    
 @app.get("/", status_code=status.HTTP_200_OK)
 async def test():
     return {"message": "Hello World"}   
+
+@app.get('/modelTest')
+async def model_func_test():
+    model = CNN_tumor(MODEL_PATH).to(device)
+    model.load_state_dict(torch.load(MODEL_PATH, weights_only=True))
+    # model.load_state_dict(torch.load("model_weights.pth", map_location=device)) # Load your weights
+    model.to(device)
+    model.eval() # Set model to evaluation mode
+    return{"Model loaded and ready!"}
 
 @app.get("/model", status_code=status.HTTP_200_OK)
 def model_info():
@@ -82,7 +123,7 @@ async def tumor_prediction(file: UploadFile = File(...)):
     # Read and preprocess the image
     image = Image.open(file.file).convert("RGB")
     input_data = scannerPreprocess(image)
-
+    # model = CNN_tumor()
     # # Run inference
     # with torch.no_grad():
     #     results = app.state.model(input_data)
@@ -95,7 +136,10 @@ async def tumor_prediction(file: UploadFile = File(...)):
 
     # inference_time = time.time() - start_time
 
-    return input_data
+    return {"img_data" :input_data ,
+            # "model data" : model,
+            }
+    # return image
     
     # return {
     #     "class": label,
@@ -105,11 +149,10 @@ async def tumor_prediction(file: UploadFile = File(...)):
     # }
 
 @app.post("/files/")
-async def create_file(file: Annotated[bytes, File()]):
-    return {"file_size": len(file)}
-    return {"filename": file.file}
-
-
-@app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile):
-    return {"filename": file.file}
+async def test_file_data_get(file: UploadFile):
+    return {"file_name": file.filename,
+            "file_size": file.content_type,
+            # "file": file.file
+            
+            }
+    # return {"filename": file.filename}
