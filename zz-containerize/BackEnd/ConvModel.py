@@ -7,14 +7,8 @@ from torchvision import datasets, transforms
 from torchvision.transforms import Compose, ColorJitter, ToTensor
 from torchvision.io import decode_image
 from torchvision.datasets import ImageFolder
-from lightning.pytorch.callbacks.early_stopping import EarlyStopping
-from lightning.pytorch import Trainer
-from PIL import Image
-from datasets import load_dataset
-from tqdm import tqdm
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+# from lightning.pytorch.callbacks.early_stopping import EarlyStopping
+# from lightning.pytorch import Trainer
 
 
 batch_size = 16
@@ -22,16 +16,7 @@ batch_size = 16
 image_height = 224
 image_width = 224
 
-#ImageFolder automatically one hot folder(no as 0,yes as 1) so we dont have to put label ourselves
-brain_dataset =ImageFolder(root='brain_tumor_dataset', transform=None)
-
-#get amount of output classes
-classes_amount = len(brain_dataset.classes)
-print(classes_amount)
-
-image , label = next(iter(brain_dataset))
-print(image,label)
-
+classes_amount = 2
 #====================================model===============================================
 
 class CNN_tumor(nn.Module):

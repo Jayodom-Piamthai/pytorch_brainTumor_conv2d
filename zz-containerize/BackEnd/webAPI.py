@@ -3,8 +3,6 @@
 
 #---------------------------fast api------------------------------
 from fastapi import FastAPI,status,File,UploadFile,HTTPException
-from typing import Annotated
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import time
@@ -48,8 +46,9 @@ def prediction(brainScanImage):
 async def lifespan(app: FastAPI):
     global model, device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(device)
     model = CNN_tumor(in_channels=3).to(device)
-    model.load_state_dict(torch.load("BrainTumorModel.pth", weights_only=True))
+    model.load_state_dict(torch.load("BrainTumorModel.pth", weights_only=True,map_location=device))
     model.eval()
     print("Model loaded!")
     yield

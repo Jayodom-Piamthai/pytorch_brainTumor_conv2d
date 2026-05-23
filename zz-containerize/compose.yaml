@@ -1,0 +1,23 @@
+services:
+
+  backend_fastapi:
+    build:
+      dockerfile: Dockerfile
+      context: /Backend
+    ports:
+      - 8000:80
+    restart: on-failure
+    stdin_open: true # Equivalent to -i
+    tty: true        # Equivalent to -t
+
+  frontend_react:
+    build:
+      dockerfile: Dockerfile
+      context: /Frontend/tumor-scan-app
+    ports:
+      - 9000:80
+    stdin_open: true # Equivalent to -i
+    tty: true        # Equivalent to -t 970uo7o790lkh-j0lk-h,n0k9gvmg9b9,mbvm7bbvm6ubi,8iumb8il o printd5in7xf7jrdhfguyrfufry3t547e8r7d87hf8gj98bk0m9on8m8p9,h6vcockehdg
+    depends_on:
+      - backend_fastapi 
+    restart: on-failure

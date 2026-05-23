@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+python-multipart
+torch --index-url https://download.pytorch.org/whl/cpu
+torchvision --index-url https://download.pytorch.org/whl/cpu
+torchinfo
+lightning
+tqdm
+numpy
+pandas
+matplotlib
+pillow
+datasets
+
+# contains list of all library that needs to be install,preinstalled one that already cmes
+# with python such as time or os does not need to be included here
