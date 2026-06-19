@@ -3,8 +3,6 @@
 
 #---------------------------fast api------------------------------
 from fastapi import FastAPI,status,File,UploadFile,HTTPException
-from typing import Annotated
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import time
