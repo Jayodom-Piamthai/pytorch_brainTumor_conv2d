@@ -43,7 +43,7 @@ function App() {
     const formData = new FormData();
     formData.append("file", selectedImage ?? ''); // "file" must match FastAPI param name ; ?? '' for fallback null value
 
-    const response = await fetch(_vercelAPI + "/model/prediction", {
+    const response = await fetch("/api/model/prediction", {
       method: "POST",
       body: formData,
       // DO NOT set Content-Type header — browser sets it automatically with boundary

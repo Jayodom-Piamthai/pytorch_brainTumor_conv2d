@@ -1,0 +1,15 @@
+[project]
+name = "tumor-scan-backend"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.117.1",
+    "uvicorn",
+    "torch",
+    "torchvision",
+    "pillow",
+    # your other deps (torch, pillow, etc.)
+]
+
+[tool.vercel]
+entrypoint = "main:app"
