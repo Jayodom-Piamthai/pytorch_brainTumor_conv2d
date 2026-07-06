@@ -2,48 +2,69 @@ import { useState } from 'react'
 import './App.css'
 // import ScanImageInput from './ImageInput'
 
+
+// function imageScanAPI(image){
+//   const [message, setMessage] = useState('');
+//    try {
+//       const response = await fetch('http://localhost:8000/items/', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: image,
+//       });
+
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok');
+//       }
+
+//       const data = await response.json();
+//       setMessage(data.message);
+//     } catch (error) {
+//       setMessage('Error sending data: ' + error.message);
+//     }
+//   };
+// }
+
 function App() {
   const [selectedImage, setSelectedImage] = useState(null); //getter setter
-  const [previewUrl, setPreviewUrl] = useState('');//setter getter as string
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
 
-  const _localAPI = "http://localhost:8000/";
-  const _vercelAPI = "https://pytorch-brain-tumor-conv2d.vercel.app/";
-  const handleImageChange = (e:any) => { //when image is recieved,turn it into url to be use for display
+  const handleImageChange = (e) => { //when image is recieved,turn it into url to be use for display
     const file = e.target.files[0];
     console.log(file.type)
     if (file) {
       setSelectedImage(file);
       // Create a temporary URL for the preview
-      const prevURL = URL.createObjectURL(file);
-      setPreviewUrl(prevURL);
+      setPreviewUrl(URL.createObjectURL(file));
     }
 
   };
 
-  // const apiTest = async () => {
-  //   try{
-  //      const response = await fetch('http://localhost:8000/');
-  //     //  const response = await fetch('https://http.cat/');
-  //      console.log(response)
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-  //     const result = await response.json();
-  //     console.log(result)
+  const apiTest = async () => {
+    try{
+       const response = await fetch('http://localhost:8000/');
+      //  const response = await fetch('https://http.cat/');
+       console.log(response)
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json();
+      console.log(result)
       
-  //   } catch (err) {
-  //     throw new Error('Network response error!');
-  //   } finally {
-  //     console.log('conclude API test')
-  //   }
-  // };
+    } catch (err) {
+      throw new Error('Network response error!');
+    } finally {
+      console.log('conclude API test')
+    }
+  };
 
-  const tumorPrediction = async() => { 
+  const tumorPrediction = async(file) => { 
     const formData = new FormData();
-    formData.append("file", selectedImage ?? ''); // "file" must match FastAPI param name ; ?? '' for fallback null value
+    formData.append("file", selectedImage); // "file" must match FastAPI param name
 
-    const response = await fetch(_vercelAPI + "/model/prediction", {
+    const response = await fetch("http://localhost:8000/model/prediction", {
       method: "POST",
       body: formData,
       // DO NOT set Content-Type header — browser sets it automatically with boundary
