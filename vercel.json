@@ -8,6 +8,6 @@
     }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/backend/main.py" }
+    { "source": "/api/(.*)", "destination": "/backEnd/webAPI.py" }
   ]
 }
