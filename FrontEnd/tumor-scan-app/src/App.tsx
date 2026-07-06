@@ -7,7 +7,7 @@ function App() {
   const [previewUrl, setPreviewUrl] = useState('');//setter getter as string
   const [predictionResult, setPredictionResult] = useState(null);
 
-  const _localAPI = "http://localhost:8000/";
+  // const _localAPI = "http://localhost:8000/";
   const _vercelAPI = "https://pytorch-brain-tumor-conv2d.vercel.app/";
   const handleImageChange = (e:any) => { //when image is recieved,turn it into url to be use for display
     const file = e.target.files[0];
