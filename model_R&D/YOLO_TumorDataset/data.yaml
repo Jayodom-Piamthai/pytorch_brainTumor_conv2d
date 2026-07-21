@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 4
+names: ['Glioma', 'Meningioma', 'No Tumor', 'Pituitary']
+
+roboflow:
+  workspace: ali-rostami
+  project: labeled-mri-brain-tumor-dataset
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ali-rostami/labeled-mri-brain-tumor-dataset/dataset/1

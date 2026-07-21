@@ -16,7 +16,10 @@ from PIL import Image
 
 #----------------Model define + helper functions-------------------------------
 from ConvModel import CNN_tumor
+from ultralytics import YOLO
 import io
+import seaborn
+
 image_height = 224
 image_width = 224
 scannerPreprocess = transforms.Compose([
@@ -31,7 +34,7 @@ async def file_to_image(file):
     image = scannerPreprocess(image).to(device).unsqueeze(0)
     return image
 
-PATH  = "BrainTumorModel.pth" #name of pretrained model file
+PATH  = "BrainTumorModel.pth" #name of pretrained weight file
 def prediction(brainScanImage):
     model.eval()
     with torch.no_grad():
@@ -39,16 +42,28 @@ def prediction(brainScanImage):
         predicted_class = torch.argmax(y_preds, dim=1).item()
         return(f"tumor prediction : class {'yes' if predicted_class== 1 else 'no'} ; {y_preds}")
 
+PATHYOLO = "BrainTumorYOLOWeight.pth"
+def YOLOprediction(brainScanImage):
+    YOLOmodel.eval()
+    with torch.no_grad():
+        result = model(brainScanImage)
+        predicted_class = torch.argmax(y_preds, dim=1).item()
+        return(f"tumor prediction : class {predicted_class}")
+        
 
 #---------------------async context-------------------------
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global model, device
+    global model,YOLOmodel, device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = CNN_tumor(in_channels=3).to(device)
     model.load_state_dict(torch.load("BrainTumorModel.pth", weights_only=True))
     model.eval()
+    YOLOmodel = YOLO('yolo11n.pt')
+    # YOLOmodel = torch.hub.load("ultralytics/yolov5", "custom", path="yolo11n.pt",force_reload=True)
+    # YOLOmodel.load_state_dict(torch.load("BrainTumorYOLOWeight.pth", weights_only=True))
+    YOLOmodel.eval()
     print("Model loaded!")
     yield
     # cleanup on shutdown (if needed)
@@ -104,6 +119,16 @@ async def predict_from_image_file(file: UploadFile = File(...)): #file is reques
     print(type(result))
     # return ('image read')
     return prediction(result)
+
+@app.post("/model/YOLOprediction")
+async def predict_from_image_file(file: UploadFile = File(...)): #file is requested with key named "file" , in front we need to match this name
+    if file.content_type not in ["image/jpeg", "image/png", "image/gif"]:
+        raise HTTPException(status_code=400, detail="Only JPEG, PNG, or GIF images are allowed.")
+    tumorImg = Image.open("TumorTestImage.jpg").convert('RGB')
+    result = await file_to_image(file)
+    print(type(result))
+    # return ('image read')
+    return YOLOprediction(result)
 
 @app.post("/file_info/")
 async def test_file_data_get(file: UploadFile):

@@ -7,7 +7,7 @@ function App() {
   const [previewUrl, setPreviewUrl] = useState('');//setter getter as string
   const [predictionResult, setPredictionResult] = useState(null);
 
-  // const _localAPI = "http://localhost:8000/";
+  const _localAPI = "http://localhost:8000/";
   // const _vercelAPI = "https://pytorch-brain-tumor-conv2d.vercel.app/";
   const handleImageChange = (e:any) => { //when image is recieved,turn it into url to be use for display
     const file = e.target.files[0];
@@ -43,7 +43,8 @@ function App() {
     const formData = new FormData();
     formData.append("file", selectedImage ?? ''); // "file" must match FastAPI param name ; ?? '' for fallback null value
 
-    const response = await fetch("/api/model/prediction", {
+    // const response = await fetch("/api/model/prediction", {
+    const response = await fetch(_localAPI + "model/YOLOprediction", {
       method: "POST",
       body: formData,
       // DO NOT set Content-Type header — browser sets it automatically with boundary
@@ -63,39 +64,45 @@ function App() {
     </div>
   );
 
-  const resultRecieved = predictionResult &&(
-    <div>
+  const resultRecieved = predictionResult ? (
+    <div className='diagBox'>
       <h2>{predictionResult}</h2>
+    </div>
+  ) :
+  (
+    <div className='diagBox'>
+      <h2>[prediction result and diagnostic here]</h2>
     </div>
   )
 
   // main frontend
   return (
     <>
-      <h1>Brain Tumor Scanner</h1>
-      <div className='imageInput'>
-        <input 
-          type="file" 
-          accept="image/*" // Restricts file picker to images
-          onChange={handleImageChange} 
-        />
+      <h1 className='head'>Brain Tumor Scanner</h1>
+      <div className='rowBox'>
+        <div className="subBox">
+          <div className='imageInput'>
+            <input 
+              type="file" 
+              accept="image/*" // Restricts file picker to images
+              onChange={handleImageChange} 
+            />
+          </div>
+          <div>
+            {previewUrl && (
+              <img 
+              src={previewUrl} 
+              alt="Preview" 
+              style={{ maxHeight: '21vw', maxWidth: '30vw', margin:'1vw' , borderRadius:'1vw' }} 
+              />
+            )}
+          </div>
+          {imagePrepped}
+        </div>
+        <div className="subBox">
+          {resultRecieved}
+        </div>
       </div>
-      {/* <div>
-        <ImageInput source="pictures" label="Related pictures">
-            <ImageField source="src" title="title" />
-        </ImageInput>
-      </div> */}
-      <div>
-        {previewUrl && (
-          <img 
-            src={previewUrl} 
-            alt="Preview" 
-            style={{ width: '200px', marginTop: '10px' }} 
-          />
-        )}
-      </div>
-      {imagePrepped}
-      {resultRecieved}
       {/* <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

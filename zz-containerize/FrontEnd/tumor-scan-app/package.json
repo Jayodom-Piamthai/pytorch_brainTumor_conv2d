@@ -12,6 +12,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "firebase": "^12.13.0",
+    "typescript": "^5.x.x",
     "react": "^19.2.0",
     "react-admin": "^5.5.3",
     "react-dom": "^19.2.0"
