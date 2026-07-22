@@ -44,6 +44,22 @@ function App() {
     formData.append("file", selectedImage ?? ''); // "file" must match FastAPI param name ; ?? '' for fallback null value
 
     // const response = await fetch("/api/model/prediction", {
+    const response = await fetch(_localAPI + "model/prediction", {
+      method: "POST",
+      body: formData,
+      // DO NOT set Content-Type header — browser sets it automatically with boundary
+    });
+
+    const data = await response.json();
+    setPredictionResult(data)
+    return data;
+  };
+
+  const YoloTumorPrediction = async() => { 
+    const formData = new FormData();
+    formData.append("file", selectedImage ?? ''); // "file" must match FastAPI param name ; ?? '' for fallback null value
+
+    // const response = await fetch("/api/model/prediction", {
     const response = await fetch(_localAPI + "model/YOLOprediction", {
       method: "POST",
       body: formData,
@@ -60,6 +76,9 @@ function App() {
       {/* <button onClick={() => console.log("Scanning for tumor...")}> */}
       <button onClick={tumorPrediction}>
         Scan now
+      </button>
+      <button onClick={YoloTumorPrediction}>
+        Scan now YOLO
       </button>
     </div>
   );
