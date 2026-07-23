@@ -31,6 +31,7 @@
   align-self: stretch;
   height: 100vw;
   padding: 1vw;
+  font-size: 1.8vh;
 }
 .rowBox{
   height: 40vw;
