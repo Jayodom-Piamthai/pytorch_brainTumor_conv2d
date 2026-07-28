@@ -1,0 +1,10 @@
+{
+  "builds": [
+    { "src": "FrontEnd/tumor-scan-app/package.json", "use": "@vercel/static-build", "config": { "distDir": "build" } },
+    { "src": "BackEnd/webAPI.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/BackEnd/(.*)", "dest": "BackEnd/webAPI.py" },
+    { "src": "/(.*)", "dest": "FrontEnd/$1" }
+  ]
+}
