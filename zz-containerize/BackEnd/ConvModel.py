@@ -71,5 +71,6 @@ class CNN_tumor(nn.Module):
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = CNN_tumor(in_channels=3,out_classes=classes_amount).to(device)
 
-# print(model)
-# summary(model, input_size=(100,3,image_height,image_width))# (Batch Size, Channels, Height, Width)
+if __name__ == '__main__' :    
+    print(model)
+    summary(model, input_size=(100,3,image_height,image_width))# (Batch Size, Channels, Height, Width)

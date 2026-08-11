@@ -1,22 +1,17 @@
-#using node verison 22 that we uses in our frontend
-#-slim is to help docker able to download stuff from requirement file
-FROM python:3.10.19-slim
+FROM python:3.10-slim
 
-WORKDIR /.
-
+WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-#copy everything in the app into container
+# ultralytics/opencv need these system libs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 libglib2.0-0 && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-# RUN pip install requirements.txt
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirement.txt .
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirement.txt
 
 COPY . .
 
-ENV PORT=8000
 EXPOSE 8000
-
-CMD ["uvicorn", "webAPI:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn webAPI:app --host 0.0.0.0 --port ${PORT:-8000}"]
