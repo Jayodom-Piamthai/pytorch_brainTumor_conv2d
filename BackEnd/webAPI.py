@@ -29,6 +29,7 @@ import mimetypes
 import json
 import base64
 import time
+import os
 
 
 #---------------------async context-------------------------
@@ -154,11 +155,17 @@ def YOLOprediction(brainScanImage):
 app = FastAPI(lifespan=lifespan,title =' Brain Tumor Scan API')
 
 #-----------------MIDDLEWARE---------------------
+
+
 origins = [
-    "https://localhost",    
     "http://localhost",
     "http://localhost:8080",
-]
+    "http://localhost:5173"]
+
+frontend_url = os.getenv("FRONTEND_URL")#for railway
+
+if frontend_url:
+    origins.append(frontend_url)
 
 app.add_middleware(
     CORSMiddleware,
