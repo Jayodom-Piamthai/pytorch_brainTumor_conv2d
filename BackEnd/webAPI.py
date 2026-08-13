@@ -4,7 +4,6 @@
 #---------------------------fast api------------------------------
 from fastapi import FastAPI,status,File,UploadFile,HTTPException
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,14 +14,11 @@ import torch
 from torchvision import datasets, transforms
 from torchvision.transforms import Compose, ColorJitter, ToTensor
 from PIL import Image
-import numpy as np
-import matplotlib.pyplot as plt
 
 #----------------Model import + extra lib -------------------------------
 from ConvModel import CNN_tumor
 from ultralytics import YOLO
 from io import BytesIO
-import seaborn
 from datetime import datetime
 import io
 import mimetypes
@@ -31,6 +27,13 @@ import base64
 import time
 import os
 
+#----------------vercel API-----------------------------------
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from webAPI import app
+
 
 #---------------------async context-------------------------
 
@@ -38,10 +41,12 @@ import os
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global model , YOLO_ClassModel , YOLO_DetectModel , device , PATH , PATH_YOLO , PATH_YOLO_CLS
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     
-    PATH  = "Models/BrainTumorModelWeight.pth" #name of pretrained weight file
-    PATH_YOLO = "Models/YOLO_TumorDetectWeight.pt"
-    PATH_YOLO_CLS = "Models/YOLO_TumorClassWeight.pt"
+    #path for model's weight files
+    PATH = os.path.join(BASE_DIR, "Models/BrainTumorModelWeight.pth")
+    PATH_YOLO = os.path.join(BASE_DIR, "Models/YOLO_TumorDetectWeight.pt")
+    PATH_YOLO_CLS = os.path.join(BASE_DIR, "Models/YOLO_TumorClassWeight.pt")
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     YOLOdevice = '0' if torch.cuda.is_available() else 'cpu' #device 0 for ID

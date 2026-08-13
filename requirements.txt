@@ -1,6 +1,0 @@
-fastapi>=0.117.1
-uvicorn
-python-multipart
-torch 
-torchvision 
-Pillow

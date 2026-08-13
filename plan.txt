@@ -11,3 +11,5 @@ DEADLINE 8/3/69
 1-2 -> web page
 3-5 -> API + runtime
 6-8 -> docker and hosting
+
+hosting part tooks tooooooo much time and with mukdaharn problems its 13th aug now,fjuckale;a
