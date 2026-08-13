@@ -16,7 +16,7 @@ from torchvision.transforms import Compose, ColorJitter, ToTensor
 from PIL import Image
 
 #----------------Model import + extra lib -------------------------------
-from BackEnd.api.ConvModel import CNN_tumor
+from ConvModel import CNN_tumor
 from ultralytics import YOLO
 from io import BytesIO
 from datetime import datetime
@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from BackEnd.api.main import app
+from webAPI import app
 
 
 #---------------------async context-------------------------
@@ -162,12 +162,14 @@ app = FastAPI(lifespan=lifespan,title =' Brain Tumor Scan API')
 #-----------------MIDDLEWARE---------------------
 
 
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173"]
+# origins = [
+#     "http://localhost",
+#     "http://localhost:8080",
+#     "http://localhost:5173"]
 
-frontend_url = os.getenv("FRONTEND_URL")#for railway
+origins = ["*"]
+
+frontend_url = os.getenv("FRONTEND_URL")
 
 if frontend_url:
     origins.append(frontend_url)
