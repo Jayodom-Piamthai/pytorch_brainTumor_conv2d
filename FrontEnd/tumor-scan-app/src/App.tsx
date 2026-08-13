@@ -90,6 +90,7 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null); //getter setter
   const [previewUrl, setPreviewUrl] = useState('');//setter getter as string
   const [predictionResult, setPredictionResult] = useState('');
+  // #for deployment,please set env var "VITE_API_URL" in hosting service to backend's URL when build/deploy
   const _localAPI = import.meta.env.VITE_API_URL || "http://localhost:8000/"; //import for railway too
   // const _vercelAPI = "https://pytorch-brain-tumor-conv2d.vercel.app/";
   const handleImageChange = (e:any) => { //when image is recieved,turn it into url to be use for display

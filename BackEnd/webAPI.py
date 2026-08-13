@@ -162,12 +162,14 @@ app = FastAPI(lifespan=lifespan,title =' Brain Tumor Scan API')
 #-----------------MIDDLEWARE---------------------
 
 
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173"]
+# origins = [
+#     "http://localhost",
+#     "http://localhost:8080",
+#     "http://localhost:5173"]
 
-frontend_url = os.getenv("FRONTEND_URL")#for railway
+origins = ["*"]
+
+frontend_url = os.getenv("FRONTEND_URL")
 
 if frontend_url:
     origins.append(frontend_url)
