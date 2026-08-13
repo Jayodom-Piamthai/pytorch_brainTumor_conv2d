@@ -20,6 +20,5 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'build', // Change 'dist-custom' to your desired folder name
   },
 })
