@@ -1,12 +1,12 @@
 import os
 import torch
 from torch import nn , optim 
-from torch.utils.data import DataLoader,Dataset,random_split
-from torchinfo import summary
-from torchvision import datasets, transforms
-from torchvision.transforms import Compose, ColorJitter, ToTensor
-from torchvision.io import decode_image
-from torchvision.datasets import ImageFolder
+# from torch.utils.data import DataLoader,Dataset,random_split
+# from torchinfo import summary
+# from torchvision import datasets, transforms
+# from torchvision.transforms import Compose, ColorJitter, ToTensor
+# from torchvision.io import decode_image
+# from torchvision.datasets import ImageFolder
 # from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 # from lightning.pytorch import Trainer
 
@@ -71,6 +71,5 @@ class CNN_tumor(nn.Module):
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = CNN_tumor(in_channels=3,out_classes=classes_amount).to(device)
 
-if __name__ == '__main__' :    
-    print(model)
-    summary(model, input_size=(100,3,image_height,image_width))# (Batch Size, Channels, Height, Width)
+# print(model)
+# summary(model, input_size=(100,3,image_height,image_width))# (Batch Size, Channels, Height, Width)
