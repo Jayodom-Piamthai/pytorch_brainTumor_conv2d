@@ -10,6 +10,8 @@ dependencies = [
     "torchinfo>=1.8.0",
     "ultralytics",
     "pillow",
+    "xyz",
+    "cv2",
     # your other deps (torch, pillow, etc.)
 ]
 
