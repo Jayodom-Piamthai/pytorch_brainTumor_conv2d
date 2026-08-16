@@ -10,8 +10,7 @@ dependencies = [
     "torchinfo>=1.8.0",
     "ultralytics",
     "pillow",
-    "opencv-python"
-    # your other deps (torch, pillow, etc.)
+    "opencv-python-headless"
 ]
 
 [tool.vercel]
