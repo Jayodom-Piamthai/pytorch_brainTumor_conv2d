@@ -20,5 +20,6 @@ name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 
 [tool.uv.sources]
+override-dependencies = ["opencv-python; sys_platform == 'never'"]
 torch = { index = "pytorch-cpu" }
 torchvision = { index = "pytorch-cpu" }
