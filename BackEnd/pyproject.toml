@@ -4,7 +4,6 @@ version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.117.1",
-    "uvicorn",
     "torch",
     "torchvision",
     "torchinfo>=1.8.0",
@@ -15,3 +14,11 @@ dependencies = [
 
 [tool.vercel]
 entrypoint = "webAPI:app"
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
