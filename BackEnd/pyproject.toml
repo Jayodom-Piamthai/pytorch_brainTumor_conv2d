@@ -14,3 +14,7 @@ dependencies = [
 
 [tool.vercel]
 entrypoint = "webAPI:app"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
