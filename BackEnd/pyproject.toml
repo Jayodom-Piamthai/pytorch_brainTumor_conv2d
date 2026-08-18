@@ -8,9 +8,9 @@ dependencies = [
     "torchvision",
     "ultralytics",
     "pillow",
-    "opencv-python"
+    "opencv-python-headless"
+    # your other deps (torch, pillow, etc.)
 ]
 
 [tool.vercel]
 entrypoint = "webAPI:app"
-
